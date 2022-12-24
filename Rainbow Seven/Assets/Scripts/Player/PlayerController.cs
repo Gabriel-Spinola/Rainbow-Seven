@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour, IDamageable
 {
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 5f;
@@ -17,8 +17,6 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _movement;
     private Vector3 _playerVelocity;
-
-    private bool _isGrounded;
 
     private void Awake()
     {
@@ -37,7 +35,7 @@ public class PlayerController : MonoBehaviour
 
     private void Movement()
     {
-        if (_isGrounded && _playerVelocity.y < 0f) {
+        if (_controller.isGrounded is true && _playerVelocity.y < 0f) {
             _playerVelocity.y = 0f;
         }
 
@@ -50,5 +48,10 @@ public class PlayerController : MonoBehaviour
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
+    }
+
+    public void TakeDamage(float damage)
+    {
+        Debug.Log($"Damage Taken: {damage}");
     }
 }  
