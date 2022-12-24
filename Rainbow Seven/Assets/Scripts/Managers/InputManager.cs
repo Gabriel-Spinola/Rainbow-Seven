@@ -16,11 +16,13 @@ public class InputManager : MonoBehaviour
     [SerializeField] private Vector2 _mouseDelta;
 
     [SerializeField] private bool _playerJumped;
+    [SerializeField] private bool _playerSprint;
     
     public Vector2 MoveDir => _moveDir;
     public Vector2 MouseDelta => _mouseDelta;
 
     public bool PlayerJumped => _playerJumped;
+    public bool PlayerSprint => _playerSprint;
 
     private void Awake()
     {
@@ -62,5 +64,6 @@ public class InputManager : MonoBehaviour
         _mouseDelta = InputActions.Player.Look.ReadValue<Vector2>();
 
         _playerJumped = InputActions.Player.Jump.triggered;
+        _playerSprint = InputActions.Player.Sprint.triggered;
     }
 }

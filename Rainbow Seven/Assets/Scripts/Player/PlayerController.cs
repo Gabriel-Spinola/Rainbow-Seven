@@ -7,7 +7,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float _moveSpeed = 2.0f;
+    [SerializeField] private float _moveSpeed = 5.0f;
 
     private CharacterController _controller;
     private InputManager _inputs;
@@ -48,4 +48,4 @@ public class PlayerController : MonoBehaviour
         _controller.Move(_moveSpeed * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
     }
-}
+}  
