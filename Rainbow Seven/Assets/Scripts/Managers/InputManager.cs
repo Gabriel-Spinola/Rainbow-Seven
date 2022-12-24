@@ -64,6 +64,6 @@ public class InputManager : MonoBehaviour
         _mouseDelta = InputActions.Player.Look.ReadValue<Vector2>();
 
         _playerJumped = InputActions.Player.Jump.triggered;
-        _playerSprint = InputActions.Player.Sprint.triggered;
+        _playerSprint = InputActions.Player.Sprint.ReadValue<float>() > 0f;
     }
 }

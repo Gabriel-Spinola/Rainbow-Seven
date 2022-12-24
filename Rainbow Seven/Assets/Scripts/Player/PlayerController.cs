@@ -7,7 +7,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
-    [SerializeField] private float _moveSpeed = 5.0f;
+    [SerializeField] private float _moveSpeed = 5f;
+    [SerializeField] private float _sprintSpeed = 10f;
 
     private CharacterController _controller;
     private InputManager _inputs;
@@ -40,12 +41,14 @@ public class PlayerController : MonoBehaviour
             _playerVelocity.y = 0f;
         }
 
+        _playerVelocity.x = _inputs.PlayerSprint ? _sprintSpeed : _moveSpeed;
+
         _movement = new Vector3(_inputs.MoveDir.x, 0f, _inputs.MoveDir.y);
         _movement = transform.forward * _movement.z + transform.right * _movement.x + transform.up * _playerVelocity.y;
 
         transform.rotation = Quaternion.Euler(transform.rotation.x, _pov.m_HorizontalAxis.Value, transform.rotation.z);
 
-        _controller.Move(_moveSpeed * Time.deltaTime * _movement);
+        _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
     }
 }  
