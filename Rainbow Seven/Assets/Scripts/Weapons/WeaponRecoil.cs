@@ -46,14 +46,7 @@ public class WeaponRecoil : MonoBehaviour
         _cameraShake.GenerateImpulse(Camera.main.transform.forward);
     }
 
-    public void ResetRecoil()
-    {
-        _index = 0;
-    }
+    public void ResetRecoil() => _index = 0;
 
-    private int NextIndex(int index)
-    {
-        return (index + 1) % _weaponInfo.RecoilPattern.Length;
-    }
-
+    private int NextIndex(int index) => (index + 1) % _weaponInfo.RecoilPattern.Length;
 }

@@ -2,10 +2,16 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Extensions;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour, IDamageable
 {
+    [Header("References")]
+    [SerializeField] private GameObject _playerHead;
+    [SerializeField] private CinemachineRecomposer _cinemachineRecomposer;
+    [SerializeField] private CinemachineCameraOffset _cinemachineOffset;
+
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private float _sprintSpeed = 10f;
@@ -31,11 +37,12 @@ public class PlayerController : MonoBehaviour, IDamageable
     void Update()
     {
         Movement();
+        Leaning();
     }
 
     private void Movement()
     {
-        if (_controller.isGrounded is true && _playerVelocity.y < 0f) {
+        if (_controller.isGrounded && _playerVelocity.y < 0f) {
             _playerVelocity.y = 0f;
         }
 
@@ -48,6 +55,19 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
+    }
+
+    private void Leaning()
+    {
+        if (_inputs.LeanLeft) {
+            _cinemachineRecomposer.m_Dutch += Mathf.Lerp(0f, 30f, 1);
+            _cinemachineOffset.m_Offset.x = -.15f;
+        }
+        
+        if (_inputs.LeanRight) {
+            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, -30f, 0.1f);
+            _cinemachineOffset.m_Offset.x = .15f;
+        }
     }
 
     public void TakeDamage(float damage)

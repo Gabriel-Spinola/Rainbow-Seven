@@ -18,6 +18,8 @@ public class InputManager : MonoBehaviour
 
     [SerializeField] private bool _playerJumped;
     [SerializeField] private bool _playerSprint;
+    [SerializeField] private bool _leanLeft;
+    [SerializeField] private bool _leanRight;
 
     [Header("Player Combat")]
     [SerializeField] private bool _shootHold;
@@ -29,6 +31,8 @@ public class InputManager : MonoBehaviour
 
     public bool PlayerJumped => _playerJumped;
     public bool PlayerSprint => _playerSprint;
+    public bool LeanLeft => _leanLeft;
+    public bool LeanRight => _leanRight;
 
     public bool ShootHold => _shootHold;
     public bool ShootTap => _shootTap;
@@ -73,6 +77,9 @@ public class InputManager : MonoBehaviour
 
         _playerJumped = InputActions.Player.Jump.triggered;
         _playerSprint = InputActions.Player.Sprint.ReadValue<float>() > 0f;
+
+        _leanLeft = InputActions.Player.LeanLeft.triggered;
+        _leanRight = InputActions.Player.LeanRight.triggered;
 
         _shootTap = InputActions.Player.ShootTap.triggered;
         _shootHold = InputActions.Player.ShootHold.ReadValue<float>() > 0f;
