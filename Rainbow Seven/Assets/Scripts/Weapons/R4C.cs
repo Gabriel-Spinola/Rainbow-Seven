@@ -48,6 +48,10 @@ public class R4C : MonoBehaviour, IWeapon
     // Update is called once per frame
     void Update()
     {
+        if (_input.ShootTap) {
+            _weaponRecoil.ResetRecoil();
+        }
+
         if (_currentAmmo <= 0 && _input.ShootHold) {
             StartCoroutine(Reload(_weaponInfo.EmptyReloadTime));
         }
