@@ -6,6 +6,8 @@ using Utils;
 [CreateAssetMenu(menuName = "Loadout/Weapon")]
 public class WeaponInfo : ScriptableObject
 {
+    public GameObject BulletImpactPrefab;
+
     public float Damage;
     public Optional<float> FireRate;
     public float Mobility;

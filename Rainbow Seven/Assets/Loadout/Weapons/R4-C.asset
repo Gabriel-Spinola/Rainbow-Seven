@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b32f8065a9346e448a7140bf77f61546, type: 3}
   m_Name: R4-C
   m_EditorClassIdentifier: 
+  BulletImpactPrefab: {fileID: 6627791825520577522, guid: 93abe7d545e46be42a21bd05263770ff, type: 3}
   Damage: 39
   FireRate:
     _enabled: 1

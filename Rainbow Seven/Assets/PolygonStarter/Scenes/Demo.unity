@@ -7398,6 +7398,8 @@ MonoBehaviour:
   _mouseDelta: {x: 0, y: 0}
   _playerJumped: 0
   _playerSprint: 0
+  _shootHold: 0
+  _shootTap: 0
 --- !u!4 &619350874
 Transform:
   m_ObjectHideFlags: 0
@@ -8209,6 +8211,8 @@ MonoBehaviour:
   _mouseDelta: {x: 0, y: 0}
   _playerJumped: 0
   _playerSprint: 0
+  _shootHold: 0
+  _shootTap: 0
 --- !u!4 &693377351
 Transform:
   m_ObjectHideFlags: 0
@@ -16117,7 +16121,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 4974c3aa5aa3dca4e847ca65904285a1, type: 3}
   m_PrefabInstance: {fileID: 894988391}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1466994838
+--- !u!114 &1466994841
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16130,6 +16134,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponInfo: {fileID: 11400000, guid: d3465d454bcbbcc4ab99b3dd7d27b39d, type: 2}
+  _camera: {fileID: 1687258584}
 --- !u!1001 &1469995119
 PrefabInstance:
   m_ObjectHideFlags: 0

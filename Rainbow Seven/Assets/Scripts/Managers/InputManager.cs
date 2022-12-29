@@ -29,6 +29,9 @@ public class InputManager : MonoBehaviour
     public bool PlayerJumped => _playerJumped;
     public bool PlayerSprint => _playerSprint;
 
+    public bool ShootHold => _shootHold;
+    public bool ShootTap => _shootTap;
+
     private void Awake()
     {
         if (s_instance != null && s_instance != this) {
@@ -45,8 +48,6 @@ public class InputManager : MonoBehaviour
     }
 
     private void OnEnable() => InputActions.Enable();
-
-    private void OnDisable() => InputActions.Disable();
 
     private void Update()
     {
@@ -71,6 +72,7 @@ public class InputManager : MonoBehaviour
         _playerJumped = InputActions.Player.Jump.triggered;
         _playerSprint = InputActions.Player.Sprint.ReadValue<float>() > 0f;
 
-        _shootHold = InputAction.ShootHold.ReadValue<float>() > 0f;
+        _shootTap = InputActions.Player.ShootTap.triggered;
+        _shootHold = InputActions.Player.ShootHold.ReadValue<float>() > 0f;
     }
 }
