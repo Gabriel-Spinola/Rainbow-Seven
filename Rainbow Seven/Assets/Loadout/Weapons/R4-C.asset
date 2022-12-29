@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b32f8065a9346e448a7140bf77f61546, type: 3}
+  m_Name: R4-C
+  m_EditorClassIdentifier: 
+  Damage: 39
+  FireRate:
+    _enabled: 1
+    _value: 860
+  Mobility: 50
+  Capacity: 30

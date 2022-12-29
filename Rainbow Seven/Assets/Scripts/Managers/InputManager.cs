@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class InputManager : MonoBehaviour
@@ -17,6 +18,10 @@ public class InputManager : MonoBehaviour
 
     [SerializeField] private bool _playerJumped;
     [SerializeField] private bool _playerSprint;
+
+    [Header("Player Combat")]
+    [SerializeField] private bool _shootHold;
+    [SerializeField] private bool _shootTap;
     
     public Vector2 MoveDir => _moveDir;
     public Vector2 MouseDelta => _mouseDelta;
@@ -65,5 +70,7 @@ public class InputManager : MonoBehaviour
 
         _playerJumped = InputActions.Player.Jump.triggered;
         _playerSprint = InputActions.Player.Sprint.ReadValue<float>() > 0f;
+
+        _shootHold = InputAction.ShootHold.ReadValue<float>() > 0f;
     }
 }

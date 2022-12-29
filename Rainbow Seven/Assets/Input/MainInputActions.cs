@@ -62,6 +62,24 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootTap"",
+                    ""type"": ""Button"",
+                    ""id"": ""6064e5ef-ebc5-4b4e-8d49-810fbcb626f8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ShootHold"",
+                    ""type"": ""Button"",
+                    ""id"": ""dfa94945-4300-42bb-a756-104c154505fb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": ""Hold"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -152,6 +170,28 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""Sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""959ede3a-3bad-4578-8eed-2d19f1200b99"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PlayerScheme"",
+                    ""action"": ""ShootTap"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""762048ae-cd37-4738-b5e8-b63225ea6294"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PlayerScheme"",
+                    ""action"": ""ShootHold"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -181,6 +221,8 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
+        m_Player_ShootTap = m_Player.FindAction("ShootTap", throwIfNotFound: true);
+        m_Player_ShootHold = m_Player.FindAction("ShootHold", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -244,6 +286,8 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Sprint;
+    private readonly InputAction m_Player_ShootTap;
+    private readonly InputAction m_Player_ShootHold;
     public struct PlayerActions
     {
         private @MainInputActions m_Wrapper;
@@ -252,6 +296,8 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
+        public InputAction @ShootTap => m_Wrapper.m_Player_ShootTap;
+        public InputAction @ShootHold => m_Wrapper.m_Player_ShootHold;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -273,6 +319,12 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                 @Sprint.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSprint;
+                @ShootTap.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootTap;
+                @ShootTap.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootTap;
+                @ShootTap.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootTap;
+                @ShootHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootHold;
+                @ShootHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootHold;
+                @ShootHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootHold;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -289,6 +341,12 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @ShootTap.started += instance.OnShootTap;
+                @ShootTap.performed += instance.OnShootTap;
+                @ShootTap.canceled += instance.OnShootTap;
+                @ShootHold.started += instance.OnShootHold;
+                @ShootHold.performed += instance.OnShootHold;
+                @ShootHold.canceled += instance.OnShootHold;
             }
         }
     }
@@ -308,5 +366,7 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnShootTap(InputAction.CallbackContext context);
+        void OnShootHold(InputAction.CallbackContext context);
     }
 }
