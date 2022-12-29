@@ -19,3 +19,5 @@ MonoBehaviour:
     _value: 860
   Mobility: 50
   Capacity: 30
+  TacticalReloadTime: 2.7
+  EmptyReloadTime: 3.4

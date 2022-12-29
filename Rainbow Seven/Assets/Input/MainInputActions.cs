@@ -80,6 +80,15 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Hold"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""30544bab-c4c5-4778-9c13-2f84a0c1b8b2"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +201,17 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""ShootHold"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0fd08e71-5ce4-485c-9ed0-c19717e64396"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PlayerScheme"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -223,6 +243,7 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
         m_Player_ShootTap = m_Player.FindAction("ShootTap", throwIfNotFound: true);
         m_Player_ShootHold = m_Player.FindAction("ShootHold", throwIfNotFound: true);
+        m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -288,6 +309,7 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Sprint;
     private readonly InputAction m_Player_ShootTap;
     private readonly InputAction m_Player_ShootHold;
+    private readonly InputAction m_Player_Reload;
     public struct PlayerActions
     {
         private @MainInputActions m_Wrapper;
@@ -298,6 +320,7 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
         public InputAction @ShootTap => m_Wrapper.m_Player_ShootTap;
         public InputAction @ShootHold => m_Wrapper.m_Player_ShootHold;
+        public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -325,6 +348,9 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                 @ShootHold.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootHold;
                 @ShootHold.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootHold;
                 @ShootHold.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShootHold;
+                @Reload.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -347,6 +373,9 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                 @ShootHold.started += instance.OnShootHold;
                 @ShootHold.performed += instance.OnShootHold;
                 @ShootHold.canceled += instance.OnShootHold;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -368,5 +397,6 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnShootTap(InputAction.CallbackContext context);
         void OnShootHold(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
 }

@@ -5,5 +5,5 @@ using UnityEngine;
 public interface IWeapon 
 {
     void Shoot();
-    void Reload();
+    IEnumerator Reload(float time);
 }

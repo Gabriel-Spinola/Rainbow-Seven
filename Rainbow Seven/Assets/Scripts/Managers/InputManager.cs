@@ -22,6 +22,7 @@ public class InputManager : MonoBehaviour
     [Header("Player Combat")]
     [SerializeField] private bool _shootHold;
     [SerializeField] private bool _shootTap;
+    [SerializeField] private bool _reloadKey;
     
     public Vector2 MoveDir => _moveDir;
     public Vector2 MouseDelta => _mouseDelta;
@@ -31,6 +32,7 @@ public class InputManager : MonoBehaviour
 
     public bool ShootHold => _shootHold;
     public bool ShootTap => _shootTap;
+    public bool ReloadKey => _reloadKey;
 
     private void Awake()
     {
@@ -74,5 +76,7 @@ public class InputManager : MonoBehaviour
 
         _shootTap = InputActions.Player.ShootTap.triggered;
         _shootHold = InputActions.Player.ShootHold.ReadValue<float>() > 0f;
+
+        _reloadKey = InputActions.Player.Reload.triggered;
     }
 }

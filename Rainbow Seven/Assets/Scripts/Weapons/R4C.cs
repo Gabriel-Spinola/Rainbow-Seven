@@ -15,6 +15,8 @@ public class R4C : MonoBehaviour, IWeapon
     private float _nextShoot;
     private float _fireRateCalculated;
 
+    private bool _isReloading;
+
     private void Awake()
     {
         _input = InputManager.Instance;
@@ -31,7 +33,15 @@ public class R4C : MonoBehaviour, IWeapon
     // Update is called once per frame
     void Update()
     {
-       if (_input.ShootHold && _currentAmmo > 0) {
+        if (_currentAmmo <= 0 && _input.ShootHold) {
+            StartCoroutine(Reload(_weaponInfo.EmptyReloadTime));
+        }
+
+        if (_input.ReloadKey && _currentAmmo <= _weaponInfo.Capacity && !_isReloading) {
+            StartCoroutine(Reload(_weaponInfo.TacticalReloadTime));
+        }
+
+       if (_input.ShootHold && _currentAmmo > 0 && !_isReloading) {
            if (Time.time >= _nextShoot) {
                Shoot();
 
@@ -65,5 +75,15 @@ public class R4C : MonoBehaviour, IWeapon
         _currentAmmo--;
     }
 
-    public void Reload() => throw new System.NotImplementedException();
+    public IEnumerator Reload(float time)
+    {
+        _isReloading = true;
+
+        Debug.Log("Reloading");
+
+        yield return new WaitForSeconds(time);
+
+        _isReloading = false;
+        _currentAmmo = _weaponInfo.Capacity;
+    }
 }

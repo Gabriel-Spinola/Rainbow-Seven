@@ -12,4 +12,6 @@ public class WeaponInfo : ScriptableObject
     public Optional<float> FireRate;
     public float Mobility;
     public int Capacity;
+    public float TacticalReloadTime;
+    public float EmptyReloadTime;
 }
