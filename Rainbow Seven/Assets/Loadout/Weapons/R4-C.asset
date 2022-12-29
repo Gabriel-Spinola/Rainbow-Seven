@@ -21,3 +21,5 @@ MonoBehaviour:
   Capacity: 30
   TacticalReloadTime: 2.7
   EmptyReloadTime: 3.4
+  VerticalRecoil: 2.5
+  VerticalRecoilDuration: 0.1
