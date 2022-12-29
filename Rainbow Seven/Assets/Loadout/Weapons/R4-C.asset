@@ -21,5 +21,20 @@ MonoBehaviour:
   Capacity: 30
   TacticalReloadTime: 2.7
   EmptyReloadTime: 3.4
-  VerticalRecoil: 2.5
-  VerticalRecoilDuration: 0.1
+  VerticalRecoil: 3
+  HorizontalRecoil: 2
+  RecoilDuration: 0.1
+  RecoilPattern:
+  - {x: 3, y: 10}
+  - {x: 2.8, y: 10}
+  - {x: 2.5, y: 10}
+  - {x: 2, y: 10}
+  - {x: 1.8, y: 10}
+  - {x: 1.7, y: 10}
+  - {x: 1.5, y: 10}
+  - {x: 1, y: 10}
+  - {x: -1, y: 10}
+  - {x: -1.5, y: 10}
+  - {x: -2, y: 10}
+  - {x: -3, y: 10}
+  - {x: -3.5, y: 10}

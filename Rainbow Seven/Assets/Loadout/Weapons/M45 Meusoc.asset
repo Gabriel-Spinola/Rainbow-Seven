@@ -19,3 +19,10 @@ MonoBehaviour:
     _value: 0
   Mobility: 45
   Capacity: 7
+  TacticalReloadTime: 0
+  EmptyReloadTime: 0
+  VerticalRecoil: 0
+  HorizontalRecoil: 0
+  RecoilDuration: 0
+  RecoilPattern:
+  - {x: 0, y: 0}

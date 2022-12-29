@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IWeapon 
 {
+    WeaponInfo WeaponInfo { get; }
+
     void Shoot();
     IEnumerator Reload(float time);
 }

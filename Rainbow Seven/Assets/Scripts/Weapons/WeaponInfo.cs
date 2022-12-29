@@ -22,6 +22,9 @@ public class WeaponInfo : ScriptableObject
     [Header("Recoil")]
     [Range(.1f, 4f)]
     public float VerticalRecoil;
+    [Range(.1f, 4f)]
+    public float HorizontalRecoil;
     [Range(0f, .4f)]
-    public float VerticalRecoilDuration;
+    public float RecoilDuration;
+    public Vector2[] RecoilPattern;
 }

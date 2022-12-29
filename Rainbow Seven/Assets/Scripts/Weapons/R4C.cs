@@ -5,25 +5,34 @@ using static UnityEngine.UI.GridLayoutGroup;
 using UnityEngine.InputSystem;
 using Cinemachine;
 
+[RequireComponent(typeof(WeaponRecoil))]
 public class R4C : MonoBehaviour, IWeapon
 {
+    [Header("References")]
     [SerializeField] private WeaponInfo _weaponInfo;
+
     [SerializeField] private Camera _camera;
     [SerializeField] private CinemachineVirtualCamera _cinemachineCamera;
 
-    private InputManager _input;
     private CinemachinePOV _pov;
+
+    private InputManager _input;
+    
+    private WeaponRecoil _weaponRecoil;
 
     private int _currentAmmo;
     private float _nextShoot;
     private float _fireRateCalculated;
-    private float _recoilTime;
 
     private bool _isReloading;
+
+    public WeaponInfo WeaponInfo { get => _weaponInfo; }
 
     private void Awake()
     {
         _input = InputManager.Instance;
+
+        _weaponRecoil = GetComponent<WeaponRecoil>();
 
         _pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
     }
@@ -54,11 +63,6 @@ public class R4C : MonoBehaviour, IWeapon
                _nextShoot = Time.time + 1f / _fireRateCalculated;
            }
        }
-
-        if (_recoilTime > 0) {
-            _pov.m_VerticalAxis.Value -= (_weaponInfo.VerticalRecoil * Time.deltaTime) / _weaponInfo.VerticalRecoilDuration;
-            _recoilTime -= Time.deltaTime;
-        }
     }
 
     public void Shoot()
@@ -83,7 +87,7 @@ public class R4C : MonoBehaviour, IWeapon
             }
         }
 
-        GenerateRecoil();
+        _weaponRecoil.GenerateRecoil();
 
         _currentAmmo--;
     }
@@ -98,10 +102,5 @@ public class R4C : MonoBehaviour, IWeapon
 
         _isReloading = false;
         _currentAmmo = _weaponInfo.Capacity;
-    }
-
-    private void GenerateRecoil()
-    {
-        _recoilTime = _weaponInfo.VerticalRecoilDuration;
     }
 }
