@@ -13,6 +13,10 @@ public class WeaponRecoil : MonoBehaviour
     private WeaponInfo _weaponInfo;
 
     private float _recoilTime;
+    private int _index;
+
+    private float _verticalRecoil;
+    private float _horizontalRecoil;
 
     private void Awake()
     {
@@ -24,15 +28,26 @@ public class WeaponRecoil : MonoBehaviour
    private void Update()
     {
         if (_recoilTime > 0) {
-            _pov.m_VerticalAxis.Value -= (_weaponInfo.VerticalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
-            _pov.m_HorizontalAxis.Value -= (_weaponInfo.HorizontalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
+            _pov.m_VerticalAxis.Value -= (_verticalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
+            _pov.m_HorizontalAxis.Value -= (_horizontalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
             _recoilTime -= Time.deltaTime;
         }
+    }
+
+    private int NextIndex(int index)
+    {
+        return (index + 1) % _weaponInfo.RecoilPattern.Length;
     }
 
     public void GenerateRecoil()
     {
         _recoilTime = _weaponInfo.RecoilDuration;
+
+        _horizontalRecoil = _weaponInfo.RecoilPattern[_index].x;
+        _verticalRecoil = _weaponInfo.RecoilPattern[_index].y;
+
+        _index = NextIndex(_index);
+
         _cameraShake.GenerateImpulse(Camera.main.transform.forward);
     }
 }
