@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float _sprintSpeed = 10f;
     [SerializeField] private float _leanAngle = 25f;
     [SerializeField] private float _leanTime = .5f;
+    [SerializeField] private float _leanOffset = .15f;
+    [SerializeField] private float _leanOffsetTime = .8f;
 
     private CharacterController _controller;
     private InputManager _inputs;
@@ -27,7 +29,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     private Vector3 _movement;
     private Vector3 _playerVelocity;
 
-    private float _currentLeanAngle = 0;
+    private float _currentLeanAngle = 0f;
+    private float _currentLeanOffset = 0f;
     private bool _isLeaningLeft = false;
     private bool _isLeaningRight = false;
     private bool _isLeaningBack = false;
@@ -42,18 +45,13 @@ public class PlayerController : MonoBehaviour, IDamageable
         _pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
     }
 
-    private void Start()
-    {
-        _currentLeanAngle = 0f;
-    }
-
     void Update()
     {
+        _cinemachineRecomposer.m_Dutch = _currentLeanAngle;
+        _cinemachineOffset.m_Offset.x = _currentLeanOffset;
+
         Movement();
         Leaning();
-
-        Debug.Log($"Only Debug {Mathf.Lerp(0f, _leanAngle, _leanTime)}");
-        Debug.Log($"Current Lean Angle: {_currentLeanAngle}");
     }
 
     private void Movement()
@@ -68,8 +66,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         _movement = transform.forward * _movement.z + transform.right * _movement.x + transform.up * _playerVelocity.y;
 
         transform.rotation = Quaternion.Euler(transform.rotation.x, _pov.m_HorizontalAxis.Value, transform.rotation.z);
-        _playerHead.transform.rotation = Quaternion.Euler(_pov.m_VerticalAxis.Value, transform.rotation.x, transform.rotation.z);
-       // _playerHead.transform.position = new Vector3()
+        _playerHead.transform.rotation = Quaternion.Euler(_pov.m_VerticalAxis.Value, _pov.m_HorizontalAxis.Value, _currentLeanAngle);
+        _playerHead.transform.position = new Vector3(transform.position.x + _currentLeanOffset, _playerHead.transform.position.y, transform.position.z);
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
@@ -85,8 +83,7 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
 
         if (_isLeaningBack) {
-            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, 0f, _leanTime);
-            _cinemachineOffset.m_Offset.x = Mathf.Lerp(_cinemachineOffset.m_Offset.x, 0f, .8f);
+            Lean(0f, 0f);
 
             if (_cinemachineRecomposer.m_Dutch >= -1 && _cinemachineRecomposer.m_Dutch <= 1) {
                 _isLeaningBack = false;
@@ -110,8 +107,7 @@ public class PlayerController : MonoBehaviour, IDamageable
                 return;
             }
 
-            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, _leanAngle, _leanTime);
-            _cinemachineOffset.m_Offset.x = Mathf.Lerp(_cinemachineOffset.m_Offset.x, -.15f, .8f);
+            Lean(_leanAngle, -_leanOffset);
         }
         
         if (_isLeaningRight) {
@@ -121,14 +117,14 @@ public class PlayerController : MonoBehaviour, IDamageable
                 return;
             }
 
-            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, -_leanAngle, _leanTime);
-            _cinemachineOffset.m_Offset.x = Mathf.Lerp(_cinemachineOffset.m_Offset.x, .15f, .8f);
+            Lean(-_leanAngle, _leanOffset);
         }
     }
 
-    private void Lean()
+    private void Lean(float leanAngle, float offset)
     {
-
+        _currentLeanAngle = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, leanAngle, _leanTime);
+        _currentLeanOffset = Mathf.Lerp(_cinemachineOffset.m_Offset.x, offset, _leanOffsetTime);
     }
 
     public void TakeDamage(float damage)
