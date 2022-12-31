@@ -66,8 +66,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         _movement = transform.forward * _movement.z + transform.right * _movement.x + transform.up * _playerVelocity.y;
 
         transform.rotation = Quaternion.Euler(transform.rotation.x, _pov.m_HorizontalAxis.Value, transform.rotation.z);
-        _playerHead.transform.rotation = Quaternion.Euler(_pov.m_VerticalAxis.Value, _pov.m_HorizontalAxis.Value, _currentLeanAngle);
-        _playerHead.transform.position = new Vector3(transform.position.x + _currentLeanOffset, _playerHead.transform.position.y, transform.position.z);
+        _playerHead.transform.SetPositionAndRotation(
+            position: new Vector3(transform.position.x + _currentLeanOffset, _playerHead.transform.position.y, transform.position.z),
+            rotation: Quaternion.Euler(_pov.m_VerticalAxis.Value, _pov.m_HorizontalAxis.Value, _currentLeanAngle)
+        );
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;

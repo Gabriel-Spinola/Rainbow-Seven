@@ -20,11 +20,14 @@ public class InputManager : MonoBehaviour
     [SerializeField] private bool _playerSprint;
     [SerializeField] private bool _leanLeft;
     [SerializeField] private bool _leanRight;
+    [SerializeField] private bool _crouchKey;
+    [SerializeField] private bool _proneKey;
 
     [Header("Player Combat")]
     [SerializeField] private bool _shootHold;
     [SerializeField] private bool _shootTap;
     [SerializeField] private bool _reloadKey;
+    [SerializeField] private bool _aimKey;
     
     public Vector2 MoveDir => _moveDir;
     public Vector2 MouseDelta => _mouseDelta;
@@ -33,10 +36,13 @@ public class InputManager : MonoBehaviour
     public bool PlayerSprint => _playerSprint;
     public bool LeanLeft => _leanLeft;
     public bool LeanRight => _leanRight;
+    public bool CrouchKey => _crouchKey;
+    public bool ProneKey => _proneKey;
 
     public bool ShootHold => _shootHold;
     public bool ShootTap => _shootTap;
     public bool ReloadKey => _reloadKey;
+    public bool AimKey => _aimKey;
 
     private void Awake()
     {
@@ -75,15 +81,16 @@ public class InputManager : MonoBehaviour
         _moveDir = InputActions.Player.Move.ReadValue<Vector2>();
         _mouseDelta = InputActions.Player.Look.ReadValue<Vector2>();
 
-        _playerJumped = InputActions.Player.Jump.triggered;
         _playerSprint = InputActions.Player.Sprint.ReadValue<float>() > 0f;
-
+        _playerJumped = InputActions.Player.Jump.triggered;
+        _crouchKey = InputActions.Player.Crouch.triggered;
+        _proneKey = InputActions.Player.Prone.triggered;
         _leanLeft = InputActions.Player.LeanLeft.triggered;
         _leanRight = InputActions.Player.LeanRight.triggered;
 
         _shootTap = InputActions.Player.ShootTap.triggered;
         _shootHold = InputActions.Player.ShootHold.ReadValue<float>() > 0f;
-
+        _aimKey = InputActions.Player.Aim.ReadValue<float>() > 0f;
         _reloadKey = InputActions.Player.Reload.triggered;
     }
 }

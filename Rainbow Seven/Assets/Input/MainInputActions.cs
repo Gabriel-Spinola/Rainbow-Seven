@@ -107,6 +107,33 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""62409a39-6f02-4d80-a157-76f6cfe3a918"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Crouch"",
+                    ""type"": ""Button"",
+                    ""id"": ""0b91ede2-5c36-4b52-b38a-5f4fd5d1ccbb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Prone"",
+                    ""type"": ""Button"",
+                    ""id"": ""a253770b-cd97-47b7-b844-dbe69102992a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -252,6 +279,39 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                     ""action"": ""LeanRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7c300b6-0050-4461-9115-2f90614d667a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""PlayerScheme"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""45b64397-2e18-47d9-8e1e-cca746318fe1"",
+                    ""path"": ""<Keyboard>/leftCtrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PlayerScheme"",
+                    ""action"": ""Crouch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16a0e3e1-49ba-47dd-ae5b-c5d73ea208b7"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""PlayerScheme"",
+                    ""action"": ""Prone"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -286,6 +346,9 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         m_Player_Reload = m_Player.FindAction("Reload", throwIfNotFound: true);
         m_Player_LeanLeft = m_Player.FindAction("LeanLeft", throwIfNotFound: true);
         m_Player_LeanRight = m_Player.FindAction("LeanRight", throwIfNotFound: true);
+        m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+        m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_Prone = m_Player.FindAction("Prone", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -354,6 +417,9 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Reload;
     private readonly InputAction m_Player_LeanLeft;
     private readonly InputAction m_Player_LeanRight;
+    private readonly InputAction m_Player_Aim;
+    private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_Prone;
     public struct PlayerActions
     {
         private @MainInputActions m_Wrapper;
@@ -367,6 +433,9 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         public InputAction @Reload => m_Wrapper.m_Player_Reload;
         public InputAction @LeanLeft => m_Wrapper.m_Player_LeanLeft;
         public InputAction @LeanRight => m_Wrapper.m_Player_LeanRight;
+        public InputAction @Aim => m_Wrapper.m_Player_Aim;
+        public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @Prone => m_Wrapper.m_Player_Prone;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -403,6 +472,15 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                 @LeanRight.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanRight;
                 @LeanRight.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanRight;
                 @LeanRight.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLeanRight;
+                @Aim.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnAim;
+                @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Prone.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProne;
+                @Prone.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProne;
+                @Prone.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnProne;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -434,6 +512,15 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                 @LeanRight.started += instance.OnLeanRight;
                 @LeanRight.performed += instance.OnLeanRight;
                 @LeanRight.canceled += instance.OnLeanRight;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
+                @Crouch.started += instance.OnCrouch;
+                @Crouch.performed += instance.OnCrouch;
+                @Crouch.canceled += instance.OnCrouch;
+                @Prone.started += instance.OnProne;
+                @Prone.performed += instance.OnProne;
+                @Prone.canceled += instance.OnProne;
             }
         }
     }
@@ -458,5 +545,8 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
         void OnReload(InputAction.CallbackContext context);
         void OnLeanLeft(InputAction.CallbackContext context);
         void OnLeanRight(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
+        void OnCrouch(InputAction.CallbackContext context);
+        void OnProne(InputAction.CallbackContext context);
     }
 }

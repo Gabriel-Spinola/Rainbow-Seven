@@ -23,4 +23,16 @@ public class WeaponInfo : ScriptableObject
     [Range(0f, .4f)]
     public float RecoilDuration;
     public Vector2[] RecoilPattern;
+
+    // TODO: Composition Pattern 
+
+    public void Shoot()
+    {
+
+    }
+
+    public void Aim()
+    {
+
+    }
 }
