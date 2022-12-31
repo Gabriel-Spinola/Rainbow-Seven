@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Extensions;
+using System.Threading.Tasks;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour, IDamageable
@@ -24,6 +25,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     private Vector3 _movement;
     private Vector3 _playerVelocity;
 
+    private float _leanAngle = 300f;
+    private float _leanTime = .1f;
+    private float _currentLeanAngle = 0f;
+    private bool _isLeaning = false;
+
     private void Awake()
     {
         _inputs = InputManager.Instance;
@@ -34,10 +40,18 @@ public class PlayerController : MonoBehaviour, IDamageable
         _pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
     }
 
+    private void Start()
+    {
+        _currentLeanAngle = 0f;
+    }
+
     void Update()
     {
         Movement();
         Leaning();
+
+        Debug.Log($"Only Debug {Mathf.Lerp(0f, _leanAngle, _leanTime)}");
+        Debug.Log($"Current Lean Angle: {_currentLeanAngle}");
     }
 
     private void Movement()
@@ -60,14 +74,39 @@ public class PlayerController : MonoBehaviour, IDamageable
     private void Leaning()
     {
         if (_inputs.LeanLeft) {
-            _cinemachineRecomposer.m_Dutch += Mathf.Lerp(0f, 30f, 1);
+            _isLeaning = true;
+        }
+
+        if (_isLeaning) {
+            _cinemachineRecomposer.m_Dutch += Mathf.Lerp(0f, 30f, .1f);
             _cinemachineOffset.m_Offset.x = -.15f;
+
+            if (_cinemachineRecomposer.m_Dutch >= 30f) {
+                _isLeaning = false;
+            }
         }
-        
-        if (_inputs.LeanRight) {
-            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, -30f, 0.1f);
+
+        //_cinemachineRecomposer.m_Dutch += _currentLeanAngle;
+
+        /*if (_inputs.LeanRight) {
+            _isLeaning = true;
+
+            //_currentLeanAngle = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, -_leanAngle, _leanTime);
             _cinemachineOffset.m_Offset.x = .15f;
+        }*/
+    }
+
+    private void Lean()
+    {
+        if (_isLeaning) {
+            
         }
+
+        
+
+       /* if (_currentLeanAngle >= _leanAngle) {
+            _isLeaning = false;
+        }*/
     }
 
     public void TakeDamage(float damage)
