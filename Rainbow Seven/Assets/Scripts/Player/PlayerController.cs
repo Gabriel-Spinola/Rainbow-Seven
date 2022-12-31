@@ -16,6 +16,8 @@ public class PlayerController : MonoBehaviour, IDamageable
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private float _sprintSpeed = 10f;
+    [SerializeField] private float _leanAngle = 25f;
+    [SerializeField] private float _leanTime = .5f;
 
     private CharacterController _controller;
     private InputManager _inputs;
@@ -25,10 +27,10 @@ public class PlayerController : MonoBehaviour, IDamageable
     private Vector3 _movement;
     private Vector3 _playerVelocity;
 
-    private float _leanAngle = 300f;
-    private float _leanTime = .1f;
-    private float _currentLeanAngle = 0f;
-    private bool _isLeaning = false;
+    private float _currentLeanAngle = 0;
+    private bool _isLeaningLeft = false;
+    private bool _isLeaningRight = false;
+    private bool _isLeaningBack = false;
 
     private void Awake()
     {
@@ -66,6 +68,8 @@ public class PlayerController : MonoBehaviour, IDamageable
         _movement = transform.forward * _movement.z + transform.right * _movement.x + transform.up * _playerVelocity.y;
 
         transform.rotation = Quaternion.Euler(transform.rotation.x, _pov.m_HorizontalAxis.Value, transform.rotation.z);
+        _playerHead.transform.rotation = Quaternion.Euler(_pov.m_VerticalAxis.Value, transform.rotation.x, transform.rotation.z);
+       // _playerHead.transform.position = new Vector3()
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
@@ -73,40 +77,58 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void Leaning()
     {
-        if (_inputs.LeanLeft) {
-            _isLeaning = true;
+        if ((_isLeaningLeft && _inputs.LeanLeft) || (_isLeaningRight && _inputs.LeanRight)) {
+            _isLeaningLeft = false;
+            _isLeaningRight = false;
+
+            _isLeaningBack = true;
         }
 
-        if (_isLeaning) {
-            _cinemachineRecomposer.m_Dutch += Mathf.Lerp(0f, 30f, .1f);
-            _cinemachineOffset.m_Offset.x = -.15f;
+        if (_isLeaningBack) {
+            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, 0f, _leanTime);
+            _cinemachineOffset.m_Offset.x = Mathf.Lerp(_cinemachineOffset.m_Offset.x, 0f, .8f);
 
-            if (_cinemachineRecomposer.m_Dutch >= 30f) {
-                _isLeaning = false;
+            if (_cinemachineRecomposer.m_Dutch >= -1 && _cinemachineRecomposer.m_Dutch <= 1) {
+                _isLeaningBack = false;
             }
         }
 
-        //_cinemachineRecomposer.m_Dutch += _currentLeanAngle;
+        if (_inputs.LeanLeft && !_isLeaningBack) {
+            _isLeaningLeft = true;
+            _isLeaningRight = false;
+        } 
+        
+        if (_inputs.LeanRight && !_isLeaningBack) {
+            _isLeaningRight = true;
+            _isLeaningLeft = false;
+        }
 
-        /*if (_inputs.LeanRight) {
-            _isLeaning = true;
+        if (_isLeaningLeft) {
+            if (_cinemachineRecomposer.m_Dutch >= _leanAngle) {
+                _isLeaningLeft = false;
 
-            //_currentLeanAngle = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, -_leanAngle, _leanTime);
-            _cinemachineOffset.m_Offset.x = .15f;
-        }*/
+                return;
+            }
+
+            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, _leanAngle, _leanTime);
+            _cinemachineOffset.m_Offset.x = Mathf.Lerp(_cinemachineOffset.m_Offset.x, -.15f, .8f);
+        }
+        
+        if (_isLeaningRight) {
+            if (_cinemachineRecomposer.m_Dutch <= -_leanAngle) {
+                _isLeaningRight = false;
+
+                return;
+            }
+
+            _cinemachineRecomposer.m_Dutch = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, -_leanAngle, _leanTime);
+            _cinemachineOffset.m_Offset.x = Mathf.Lerp(_cinemachineOffset.m_Offset.x, .15f, .8f);
+        }
     }
 
     private void Lean()
     {
-        if (_isLeaning) {
-            
-        }
 
-        
-
-       /* if (_currentLeanAngle >= _leanAngle) {
-            _isLeaning = false;
-        }*/
     }
 
     public void TakeDamage(float damage)

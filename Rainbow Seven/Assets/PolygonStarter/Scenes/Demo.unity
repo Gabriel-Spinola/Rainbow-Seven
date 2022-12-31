@@ -23841,6 +23841,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 6725467600401944847, guid: 97685d06c881f24458e8a6199766a472, type: 3}
+      propertyPath: _leanTime
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6725467600401944847, guid: 97685d06c881f24458e8a6199766a472, type: 3}
       propertyPath: _playerHead
       value: 
       objectReference: {fileID: 576212134}
