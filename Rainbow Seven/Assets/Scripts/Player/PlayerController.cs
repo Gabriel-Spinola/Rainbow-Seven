@@ -12,10 +12,14 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private GameObject _playerHead;
     [SerializeField] private CinemachineRecomposer _cinemachineRecomposer;
     [SerializeField] private CinemachineCameraOffset _cinemachineOffset;
+    [SerializeField] private GameObject _weapon;
+    [SerializeField] private Animator _animator;
 
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private float _sprintSpeed = 10f;
+
+    [Header("Leaning")]
     [SerializeField] private float _leanAngle = 25f;
     [SerializeField] private float _leanTime = .5f;
     [SerializeField] private float _leanOffset = .15f;
@@ -51,6 +55,11 @@ public class PlayerController : MonoBehaviour, IDamageable
         _cinemachineOffset.m_Offset.x = _currentLeanOffset;
 
         Leaning();
+
+        Vector3 a = new Vector3(0.2965603f, -0.145391f, 0.5267898f);
+        Vector3 b = new Vector3(0f, 0.07131457f, 0.09836382f);
+
+        _animator.SetBool("isAiming", _inputs.AimKey);
     }
 
     private void Movement()

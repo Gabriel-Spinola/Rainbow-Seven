@@ -283,7 +283,7 @@ public partial class @MainInputActions : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e7c300b6-0050-4461-9115-2f90614d667a"",
-                    ""path"": ""<Mouse>/leftButton"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": ""Hold"",
                     ""processors"": """",
                     ""groups"": ""PlayerScheme"",
