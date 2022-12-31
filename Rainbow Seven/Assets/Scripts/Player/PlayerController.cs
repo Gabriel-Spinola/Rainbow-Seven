@@ -50,7 +50,6 @@ public class PlayerController : MonoBehaviour, IDamageable
         _cinemachineRecomposer.m_Dutch = _currentLeanAngle;
         _cinemachineOffset.m_Offset.x = _currentLeanOffset;
 
-        Movement();
         Leaning();
     }
 
@@ -73,6 +72,11 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
+    }
+
+    private void FixedUpdate()
+    {
+        Movement();
     }
 
     private void Leaning()
