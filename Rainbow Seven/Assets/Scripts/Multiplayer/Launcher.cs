@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using TMPro;
 using Photon.Realtime;
+using System.Linq;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
@@ -14,7 +15,9 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] private TMP_Text _errorText;
     [SerializeField] private TMP_Text _roomNameText;
     [SerializeField] private Transform _roomListContent;
+    [SerializeField] private Transform _playerListContent;
     [SerializeField] private GameObject _roomListItemPrefab;
+    [SerializeField] private GameObject _playerListItemPrefab;
 
     private void Awake()
     {
@@ -33,7 +36,8 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         Debug.Log("Connected to Master");
 
-        PhotonNetwork.JoinLobby();
+        PhotonNetwork.JoinLobby(); 
+        PhotonNetwork.NickName = $"Player {Random.Range(0, 2000)}";
     }
 
     public override void OnJoinedLobby()
@@ -52,22 +56,28 @@ public class Launcher : MonoBehaviourPunCallbacks
         MenuManager.Instance.OpenMenu("Loading");
     }
 
+    public void JoinRoom(RoomInfo roomInfo)
+    {
+        PhotonNetwork.JoinRoom(roomInfo.Name);
+        MenuManager.Instance.OpenMenu("Loading");
+    }
+
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("Room");
         _roomNameText.text = PhotonNetwork.CurrentRoom.Name;
+
+        Player[] players = PhotonNetwork.PlayerList;
+
+        for (int i = 0; i < players.Length; i++) {
+            Instantiate(_playerListItemPrefab, _playerListContent).GetComponent<PlayerListItem>().SetUp(players[i]);
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
         _errorText.text = $"Room creation failed: {message}";
         MenuManager.Instance.OpenMenu("Error");
-    }
-
-    public void JoinRoom(RoomInfo roomInfo)
-    {
-        PhotonNetwork.JoinRoom(roomInfo.Name);
-        MenuManager.Instance.OpenMenu("Loading");
     }
 
     public void LeaveRoom()
@@ -90,5 +100,10 @@ public class Launcher : MonoBehaviourPunCallbacks
         for (int i = 0; i < roomList.Count; i++) {
             Instantiate(_roomListItemPrefab, _roomListContent).GetComponent<RoomListItem>().SetUp(roomList[i]);
         }
+    }
+
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        Instantiate(_playerListItemPrefab, _playerListContent).GetComponent<PlayerListItem>().SetUp(newPlayer);
     }
 }
