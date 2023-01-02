@@ -12,6 +12,7 @@ public class MenuManager : MonoBehaviour
     {
         Instance = this;
     }
+
     public void OpenMenu(string menuName)
     {
         for (int i = 0; i < _menus.Length; i++) {

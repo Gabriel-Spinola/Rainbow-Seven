@@ -11,7 +11,7 @@ public class TitleScreen : MonoBehaviour
     void Update()
     {
         if (Input.anyKey && CanStart) {
-            MenuManager.Instance.OpenMenu("Main Menu");
+            MenuManager.Instance.OpenMenu("Main");
 
             Debug.Log("Should start");
             CanStart = false;
