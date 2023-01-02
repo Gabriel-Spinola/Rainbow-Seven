@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using UnityEngine;
 
-namespace Extensions
+namespace CustomExtensions
 {
     public static class Extensions
     {

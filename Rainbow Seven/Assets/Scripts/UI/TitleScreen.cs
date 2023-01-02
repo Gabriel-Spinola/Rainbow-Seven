@@ -6,10 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class TitleScreen : MonoBehaviour
 {
+    public bool CanStart;
+
     void Update()
     {
-        if (Input.anyKey) {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        if (Input.anyKey && CanStart) {
+            MenuManager.Instance.OpenMenu("Main Menu");
+
+            Debug.Log("Should start");
+            CanStart = false;
         }
     }
 }

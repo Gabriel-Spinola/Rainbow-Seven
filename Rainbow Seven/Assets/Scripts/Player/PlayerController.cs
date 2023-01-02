@@ -2,7 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Extensions;
+using CustomExtensions;
 using System.Threading.Tasks;
 
 [RequireComponent(typeof(CharacterController))]
