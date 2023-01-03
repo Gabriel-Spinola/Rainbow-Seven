@@ -22,7 +22,7 @@ public class Launcher : MonoBehaviourPunCallbacks
     [SerializeField] private GameObject _playerListItemPrefab;
     [SerializeField] private GameObject _startGameButton;
 
-    private static Dictionary<string, RoomInfo> _cachedRoomList = new Dictionary<string, RoomInfo>();
+    private static Dictionary<string, RoomInfo> s_cachedRoomList = new Dictionary<string, RoomInfo>();
 
     private void Awake()
     {
@@ -99,13 +99,13 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         PhotonNetwork.LeaveRoom();
         MenuManager.Instance.OpenMenu("Loading");
-        _cachedRoomList.Clear();
+        s_cachedRoomList.Clear();
     }
 
     public override void OnLeftRoom()
     {
         MenuManager.Instance.OpenMenu("Main");
-        _cachedRoomList.Clear();
+        s_cachedRoomList.Clear();
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -116,14 +116,14 @@ public class Launcher : MonoBehaviourPunCallbacks
             RoomInfo info = roomList[i];
 
             if (info.RemovedFromList) {
-                _cachedRoomList.Remove(info.Name);
+                s_cachedRoomList.Remove(info.Name);
             }
             else {
-                _cachedRoomList[info.Name] = info;
+                s_cachedRoomList[info.Name] = info;
             }
 
-            foreach (KeyValuePair<string, RoomInfo> entry in _cachedRoomList) {
-                Instantiate(_roomListItemPrefab, _roomListContent).GetComponent<RoomListItem>().SetUp(_cachedRoomList[entry.Key]);
+            foreach (KeyValuePair<string, RoomInfo> entry in s_cachedRoomList) {
+                Instantiate(_roomListItemPrefab, _roomListContent).GetComponent<RoomListItem>().SetUp(s_cachedRoomList[entry.Key]);
             }
         }
     }
