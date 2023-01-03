@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8888294252929187781}
   - component: {fileID: 2334217125892705684}
   m_Layer: 0
-  m_Name: Impact
+  m_Name: PRE Impact
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

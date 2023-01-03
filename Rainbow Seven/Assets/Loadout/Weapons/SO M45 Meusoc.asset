@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b32f8065a9346e448a7140bf77f61546, type: 3}
-  m_Name: M45 Meusoc
+  m_Name: SO M45 Meusoc
   m_EditorClassIdentifier: 
   BulletImpactPrefab: {fileID: 6627791825520577522, guid: 93abe7d545e46be42a21bd05263770ff, type: 3}
   Damage: 58
