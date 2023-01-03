@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomExtensions;
 using System.Threading.Tasks;
+using Photon.Pun;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour, IDamageable
@@ -26,9 +27,11 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private float _leanOffset = .15f;
     [SerializeField] private float _leanOffsetTime = .8f;
 
+    public static CinemachinePOV Pov;
+
     private CharacterController _controller;
     private InputManager _inputs;
-    public static CinemachinePOV Pov;
+    private PhotonView _photonView;
 
     private Vector3 _movement;
     private Vector3 _playerVelocity;
@@ -44,10 +47,18 @@ public class PlayerController : MonoBehaviour, IDamageable
         _inputs = InputManager.Instance;
 
         _controller = GetComponent<CharacterController>();
+        _photonView = GetComponent<PhotonView>();
     }
 
     private void Start()
     {
+        if (!_photonView.IsMine) {
+            Destroy(GetComponentInChildren<Camera>().gameObject);
+            Destroy(_controller);
+
+            return;
+        }
+
         _cinemachineCamera = Instantiate(_cinemachineCamera.gameObject).GetComponent<CinemachineVirtualCamera>();
 
         Pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
@@ -56,6 +67,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     void Update()
     {
+        if (!_photonView.IsMine)
+            return; 
+
         _cinemachineRecomposer.m_Dutch = _currentLeanAngle;
         _cinemachineOffset.m_Offset.x = _currentLeanOffset;
 
@@ -65,6 +79,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         Vector3 b = new Vector3(0f, 0.07131457f, 0.09836382f);
 
         _animator.SetBool("isAiming", _inputs.AimKey);
+    }
+
+    private void FixedUpdate()
+    {
+        if (!_photonView.IsMine)
+            return;
+
+        Movement();
     }
 
     private void Movement()
@@ -81,7 +103,9 @@ public class PlayerController : MonoBehaviour, IDamageable
         _movement = new Vector3(_inputs.MoveDir.x, 0f, _inputs.MoveDir.y);
         _movement = transform.forward * _movement.z + transform.right * _movement.x + transform.up * _playerVelocity.y;
 
-       transform.rotation = Quaternion.Euler(transform.rotation.x, Pov.m_HorizontalAxis.Value, transform.rotation.z);
+        _cinemachineCamera.transform.rotation = Quaternion.Euler(Pov.m_VerticalAxis.Value, Pov.m_HorizontalAxis.Value, _currentLeanAngle);
+
+        transform.rotation = Quaternion.Euler(transform.rotation.x, Pov.m_HorizontalAxis.Value, transform.rotation.z);
         _playerHead.transform.SetPositionAndRotation(
             position: new Vector3(transform.position.x + _currentLeanOffset, _playerHead.transform.position.y, transform.position.z),
             rotation: Quaternion.Euler(Pov.m_VerticalAxis.Value, Pov.m_HorizontalAxis.Value, _currentLeanAngle)
@@ -89,11 +113,6 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);
         _playerVelocity.y += Physics.gravity.y * Time.deltaTime;
-    }
-
-    private void FixedUpdate()
-    {
-        Movement();
     }
 
     private void Leaning()
