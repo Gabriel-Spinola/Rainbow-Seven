@@ -8,17 +8,17 @@ public class RoomListItem : MonoBehaviour
 {
     [SerializeField] TMP_Text _text;
 
-    private RoomInfo _roomInfo;
+    public RoomInfo RoomInfo;
 
     public void SetUp(RoomInfo roomInfo) 
     {
-        _roomInfo = roomInfo;
+        RoomInfo = roomInfo;
 
-        _text.text = _roomInfo.Name;
+        _text.text = RoomInfo.Name;
     }
 
     public void OnClick()
     {
-        Launcher.Instance.JoinRoom(_roomInfo);
+        Launcher.Instance.JoinRoom(RoomInfo);
     }
 }

@@ -8,6 +8,11 @@ public class Menu : MonoBehaviour
     public string MenuName;
     public bool IsOpen;
 
+    private void Start()
+    {
+        gameObject.SetActive(IsOpen);
+    }
+
     public void Open()
     {
         gameObject.SetActive(true);
