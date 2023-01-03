@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private GameObject _weapon;
     [SerializeField] private Animator _animator;
     [SerializeField] private CinemachineVirtualCamera _cinemachineCamera;
+    [SerializeField] private Weapon[] _weapons;
 
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 5f;
@@ -36,8 +37,12 @@ public class PlayerController : MonoBehaviour, IDamageable
     private Vector3 _movement;
     private Vector3 _playerVelocity;
 
+    private int _itemIndex;
+    private int _previusItemIndex = -1;
+
     private float _currentLeanAngle = 0f;
     private float _currentLeanOffset = 0f;
+
     private bool _isLeaningLeft = false;
     private bool _isLeaningRight = false;
     private bool _isLeaningBack = false;
@@ -59,6 +64,8 @@ public class PlayerController : MonoBehaviour, IDamageable
             return;
         }
 
+        EquipItem(0);
+
         _cinemachineCamera = Instantiate(_cinemachineCamera.gameObject).GetComponent<CinemachineVirtualCamera>();
 
         Pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
@@ -79,6 +86,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         Vector3 b = new Vector3(0f, 0.07131457f, 0.09836382f);
 
         _animator.SetBool("isAiming", _inputs.AimKey);
+
+        for (int i = 0; i < _weapons.Length; i++) {
+            if (Input.GetKeyDown((i + 1).ToString())) {
+                EquipItem(i);
+
+                break;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -167,6 +182,19 @@ public class PlayerController : MonoBehaviour, IDamageable
     {
         _currentLeanAngle = Mathf.Lerp(_cinemachineRecomposer.m_Dutch, leanAngle, _leanTime);
         _currentLeanOffset = Mathf.Lerp(_cinemachineOffset.m_Offset.x, offset, _leanOffsetTime);
+    }
+
+    private void EquipItem(int index)
+    {
+        _itemIndex = index;
+
+        _weapons[_itemIndex].gameObject.SetActive(true);
+
+        if (_previusItemIndex != -1) {
+            _weapons[_previusItemIndex].gameObject.SetActive(false);
+        }
+
+        _previusItemIndex = _itemIndex;
     }
 
     public void TakeDamage(float damage)

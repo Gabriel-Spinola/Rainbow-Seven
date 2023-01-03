@@ -20,7 +20,7 @@ public class WeaponRecoil : MonoBehaviour
 
     private void Awake()
     {
-        _weaponInfo = GetComponentInParent<IWeapon>().WeaponInfo;
+        _weaponInfo = GetComponentInParent<Weapon>().WeaponInfo;
         _cameraShake = GetComponent<CinemachineImpulseSource>();
     }
 
