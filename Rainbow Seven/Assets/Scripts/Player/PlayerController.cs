@@ -5,9 +5,11 @@ using UnityEngine;
 using CustomExtensions;
 using System.Threading.Tasks;
 using Photon.Pun;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Photon.Realtime;
 
 [RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour, IDamageable
+public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {
     [Header("References")]
     [SerializeField] private GameObject _playerHead;
@@ -87,13 +89,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
         _animator.SetBool("isAiming", _inputs.AimKey);
 
-        for (int i = 0; i < _weapons.Length; i++) {
-            if (Input.GetKeyDown((i + 1).ToString())) {
-                EquipItem(i);
-
-                break;
-            }
-        }
+        SwitchWeapons();
     }
 
     private void FixedUpdate()
@@ -186,6 +182,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void EquipItem(int index)
     {
+        if (index == _previusItemIndex)
+            return;
+
         _itemIndex = index;
 
         _weapons[_itemIndex].gameObject.SetActive(true);
@@ -195,6 +194,33 @@ public class PlayerController : MonoBehaviour, IDamageable
         }
 
         _previusItemIndex = _itemIndex;
+
+        if (_photonView.IsMine) {
+            Hashtable hash = new Hashtable();
+            hash.Add("ItemIndex", _itemIndex);
+
+            // Send the item information over the network
+            PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
+        }
+    }
+
+    private void SwitchWeapons() 
+    {
+        for (int i = 0; i < _weapons.Length; i++) {
+            if (Input.GetKeyDown((i + 1).ToString())) {
+                EquipItem(i);
+
+                break;
+            }
+        }
+    }
+
+    public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+    {
+        // Get the item information and sync it
+        if (!_photonView.IsMine && targetPlayer == _photonView.Owner) {
+            EquipItem((int) changedProps["ItemIndex"]);
+        }
     }
 
     public void TakeDamage(float damage)
