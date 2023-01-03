@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour, IDamageable
     [SerializeField] private CinemachineCameraOffset _cinemachineOffset;
     [SerializeField] private GameObject _weapon;
     [SerializeField] private Animator _animator;
+    [SerializeField] private CinemachineVirtualCamera _cinemachineCamera;
 
     [Header("Movement")]
     [SerializeField] private float _moveSpeed = 5f;
@@ -27,8 +28,7 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private CharacterController _controller;
     private InputManager _inputs;
-    private CinemachineVirtualCamera _cinemachineCamera;
-    private CinemachinePOV _pov;
+    public static CinemachinePOV Pov;
 
     private Vector3 _movement;
     private Vector3 _playerVelocity;
@@ -44,9 +44,14 @@ public class PlayerController : MonoBehaviour, IDamageable
         _inputs = InputManager.Instance;
 
         _controller = GetComponent<CharacterController>();
+    }
 
-        _cinemachineCamera = FindObjectOfType<CinemachineVirtualCamera>();
-        _pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
+    private void Start()
+    {
+        _cinemachineCamera = Instantiate(_cinemachineCamera.gameObject).GetComponent<CinemachineVirtualCamera>();
+
+        Pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
+        _cinemachineCamera.Follow = _playerHead.transform;
     }
 
     void Update()
@@ -64,6 +69,9 @@ public class PlayerController : MonoBehaviour, IDamageable
 
     private void Movement()
     {
+        if (Pov == null)
+            return;
+
         if (_controller.isGrounded && _playerVelocity.y < 0f) {
             _playerVelocity.y = 0f;
         }
@@ -73,10 +81,10 @@ public class PlayerController : MonoBehaviour, IDamageable
         _movement = new Vector3(_inputs.MoveDir.x, 0f, _inputs.MoveDir.y);
         _movement = transform.forward * _movement.z + transform.right * _movement.x + transform.up * _playerVelocity.y;
 
-        transform.rotation = Quaternion.Euler(transform.rotation.x, _pov.m_HorizontalAxis.Value, transform.rotation.z);
+       transform.rotation = Quaternion.Euler(transform.rotation.x, Pov.m_HorizontalAxis.Value, transform.rotation.z);
         _playerHead.transform.SetPositionAndRotation(
             position: new Vector3(transform.position.x + _currentLeanOffset, _playerHead.transform.position.y, transform.position.z),
-            rotation: Quaternion.Euler(_pov.m_VerticalAxis.Value, _pov.m_HorizontalAxis.Value, _currentLeanAngle)
+            rotation: Quaternion.Euler(Pov.m_VerticalAxis.Value, Pov.m_HorizontalAxis.Value, _currentLeanAngle)
         );
 
         _controller.Move(_playerVelocity.x * Time.deltaTime * _movement);

@@ -7,9 +7,9 @@ using UnityEngine;
 public class WeaponRecoil : MonoBehaviour
 {
     [SerializeField] private CinemachineVirtualCamera _cinemachineCamera;
+    [SerializeField] private Camera _camera;
 
     private CinemachineImpulseSource _cameraShake;
-    private CinemachinePOV _pov;
     private WeaponInfo _weaponInfo;
 
     private float _recoilTime;
@@ -22,14 +22,13 @@ public class WeaponRecoil : MonoBehaviour
     {
         _weaponInfo = GetComponentInParent<IWeapon>().WeaponInfo;
         _cameraShake = GetComponent<CinemachineImpulseSource>();
-        _pov = _cinemachineCamera.GetCinemachineComponent<CinemachinePOV>();
     }
 
-   private void Update()
+    private void Update()
     {
         if (_recoilTime > 0) {
-            _pov.m_VerticalAxis.Value -= (_verticalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
-            _pov.m_HorizontalAxis.Value -= (_horizontalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
+            PlayerController.Pov.m_VerticalAxis.Value -= (_verticalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
+            PlayerController.Pov.m_HorizontalAxis.Value -= (_horizontalRecoil * Time.deltaTime) / _weaponInfo.RecoilDuration;
             _recoilTime -= Time.deltaTime;
         }
     }
@@ -43,7 +42,7 @@ public class WeaponRecoil : MonoBehaviour
 
         _index = NextIndex(_index);
 
-        _cameraShake.GenerateImpulse(Camera.main.transform.forward);
+        _cameraShake.GenerateImpulse(_cinemachineCamera.transform.forward);
     }
 
     public void ResetRecoil() => _index = 0;
