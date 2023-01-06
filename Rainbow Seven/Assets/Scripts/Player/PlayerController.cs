@@ -240,7 +240,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [PunRPC]
     public void RPC_TakeDamage(int damage)
     {
-        if (!_photonView.IsMine)
+        if (!_photonView.isActiveAndEnabled)
+            return;
+
+        if (!_photonView.IsMine )
             return;
 
         _currentHealth -= damage;

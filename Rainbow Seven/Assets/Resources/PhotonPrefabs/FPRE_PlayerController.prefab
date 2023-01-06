@@ -903,7 +903,6 @@ MonoBehaviour:
   _leanTime: 0.2
   _leanOffset: 0.2
   _leanOffsetTime: 0.8
-  _isDebugging: 1
 --- !u!114 &6264889675079574996
 MonoBehaviour:
   m_ObjectHideFlags: 0
