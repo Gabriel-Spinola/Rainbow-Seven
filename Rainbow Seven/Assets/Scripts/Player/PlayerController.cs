@@ -60,6 +60,10 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
         _controller = GetComponent<CharacterController>();
         _photonView = GetComponent<PhotonView>();
+
+#if (UNITY_EDITOR == false)
+        Destroy(gameobject);    
+#endif
     }
 
     private void Start()

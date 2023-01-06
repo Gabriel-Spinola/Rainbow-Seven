@@ -27,7 +27,7 @@ public class R4C : Weapon
 
        if (Input.ShootHold && CurrentAmmo > 0 && !IsReloading) {
            if (Time.time >= _nextShoot) {
-               Shoot();
+               base.Shoot();
 
                _nextShoot = Time.time + 1f / _fireRateCalculated;
            }
