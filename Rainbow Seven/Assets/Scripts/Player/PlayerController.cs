@@ -30,6 +30,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] private float _leanOffset = .15f;
     [SerializeField] private float _leanOffsetTime = .8f;
 
+    [Header("Debug")]
+    [SerializeField] private bool _isDebugging;
+
     public static CinemachinePOV Pov;
 
     private CharacterController _controller;
@@ -41,6 +44,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     private int _itemIndex;
     private int _previusItemIndex = -1;
+    private int _maxHealth = 100;
+    private int _currentHealth;
 
     private float _currentLeanAngle = 0f;
     private float _currentLeanOffset = 0f;
@@ -67,6 +72,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
 
         EquipItem(0);
+
+        _currentHealth = _maxHealth;
 
         _cinemachineCamera = Instantiate(_cinemachineCamera.gameObject).GetComponent<CinemachineVirtualCamera>();
 
@@ -196,8 +203,9 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         _previusItemIndex = _itemIndex;
 
         if (_photonView.IsMine) {
-            Hashtable hash = new Hashtable();
-            hash.Add("ItemIndex", _itemIndex);
+            Hashtable hash = new Hashtable {
+                { "ItemIndex", _itemIndex }
+            };
 
             // Send the item information over the network
             PhotonNetwork.LocalPlayer.SetCustomProperties(hash);
@@ -223,8 +231,34 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(int damage)
     {
-        Debug.Log($"Damage Taken: {damage}");
+        _photonView.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC]
+    public void RPC_TakeDamage(int damage)
+    {
+        if (!_photonView.IsMine)
+            return;
+
+        _currentHealth -= damage;
+
+#if UNITY_EDITOR
+        if (_isDebugging) {
+            Debug.Log($"{gameObject.name} Took Damage: {damage}");
+
+            return;
+        }
+#endif
+
+        if (_currentHealth <= 0) {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }  
