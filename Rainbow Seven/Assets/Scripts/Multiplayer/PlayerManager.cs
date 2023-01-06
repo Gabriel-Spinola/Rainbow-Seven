@@ -6,7 +6,12 @@ using System.IO;
 
 public class PlayerManager : MonoBehaviour
 {
+    [Header("Debug")]
+    public bool IsDebugging;
+    public bool ShouldRespawn;
+
     private PhotonView _photonView;
+    private GameObject _controller;
 
     private void Awake()
     {
@@ -22,6 +27,23 @@ public class PlayerManager : MonoBehaviour
 
     private void CreateController()
     {
-        PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "FPRE_PlayerController"), new Vector3(17.63f, 15f, .45f), Quaternion.identity);
+        _controller = PhotonNetwork.Instantiate(
+            prefabName: Path.Combine("PhotonPrefabs", "FPRE_PlayerController"),
+            position: new Vector3(17.63f, 15f, .45f),
+            rotation: Quaternion.identity,
+            group: 0,
+            data: new object[] {
+                _photonView.ViewID
+            }
+        );
+    }
+
+    public void Die()
+    {
+        PhotonNetwork.Destroy(_controller);
+
+        if (IsDebugging) {
+            CreateController();
+        }
     }
 }

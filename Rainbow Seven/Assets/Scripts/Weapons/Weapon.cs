@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using UnityEngine.InputSystem.HID;
 
+[RequireComponent(typeof(WeaponRecoil), typeof(PhotonView))]  
 public abstract class Weapon : MonoBehaviour
 {
     [Header("References")]
@@ -16,11 +19,14 @@ public abstract class Weapon : MonoBehaviour
     protected bool IsReloading;
     protected int CurrentAmmo;
 
+    private PhotonView _photonView;
+
     protected virtual void Awake()
     {
         Input = InputManager.Instance;
 
         WeaponRecoil = GetComponent<WeaponRecoil>();
+        _photonView = GetComponent<PhotonView>();
     }
 
     protected virtual void Start()
@@ -57,24 +63,17 @@ public abstract class Weapon : MonoBehaviour
 
     protected virtual void Shoot()
     {
+        if (!_photonView.IsMine)
+            return;
+
         Ray ray = _camera.ViewportPointToRay(new Vector3(.5f, .5f));
         ray.origin = _camera.transform.position;
 
         if (Physics.Raycast(ray, out RaycastHit hit)) {
             hit.collider.gameObject.GetComponent<IDamageable>()?.TakeDamage(WeaponInfo.Damage);
+            Debug.Log(hit.collider.gameObject.name);
 
-            Collider[] colliders = Physics.OverlapSphere(hit.point, .3f);
-
-            if (colliders.Length != 0) {
-                GameObject bulletImpactObject = Instantiate(
-                    WeaponInfo.BulletImpactPrefab, hit.point + hit.normal * 0.001f,
-                    Quaternion.LookRotation(hit.normal, Vector3.up) * WeaponInfo.BulletImpactPrefab.transform.rotation
-                );
-
-                Destroy(bulletImpactObject, 8f);
-
-                bulletImpactObject.transform.SetParent(colliders[0].transform);
-            }
+            //_photonView.RPC(nameof(RPC_Shoot), RpcTarget.All, hit.point, hit.normal);
         }
 
         WeaponRecoil.GenerateRecoil();

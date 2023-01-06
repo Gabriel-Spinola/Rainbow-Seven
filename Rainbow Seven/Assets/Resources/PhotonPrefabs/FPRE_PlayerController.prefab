@@ -64,8 +64,9 @@ GameObject:
   - component: {fileID: 1197037179}
   - component: {fileID: 1197037178}
   - component: {fileID: 2078487223491824182}
-  - component: {fileID: 2788026247322032235}
   - component: {fileID: 1197037177}
+  - component: {fileID: 2788026247322032235}
+  - component: {fileID: 2468698645486279147}
   m_Layer: 0
   m_Name: M45 Meusoc
   m_TagString: Untagged
@@ -149,7 +150,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponInfo: {fileID: 11400000, guid: 15fb16253a533e348b0b0e9e226c599b, type: 2}
-  _camera: {fileID: 0}
+  _camera: {fileID: 4543182722025960215}
+--- !u!114 &1197037177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1197037175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a1734d6ea011b774fb790b35f9daf8fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cinemachineCamera: {fileID: 4186995990156740968, guid: d33d7c4553fcde043b095c8f09f79c85, type: 3}
+  _camera: {fileID: 4543182722025960215}
 --- !u!114 &2788026247322032235
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,7 +207,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 1000
     m_PropagationSpeed: 343
---- !u!114 &1197037177
+--- !u!114 &2468698645486279147
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -201,11 +216,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 1197037175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a1734d6ea011b774fb790b35f9daf8fa, type: 3}
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cinemachineCamera: {fileID: 4186995990156740968, guid: d33d7c4553fcde043b095c8f09f79c85, type: 3}
-  _camera: {fileID: 4543182722025960215}
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6706831848452784936
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,6 +476,7 @@ GameObject:
   - component: {fileID: 1466994841}
   - component: {fileID: 1466994843}
   - component: {fileID: 1466994842}
+  - component: {fileID: 5675889254414799448}
   m_Layer: 0
   m_Name: R4C
   m_TagString: Untagged
@@ -597,6 +621,28 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 1000
     m_PropagationSpeed: 343
+--- !u!114 &5675889254414799448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6725467599911233354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6725467599911233356
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,6 +815,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6725467600401944844}
   - component: {fileID: 6725467600401944846}
+  - component: {fileID: 5008102871316364061}
   - component: {fileID: 6725467600401944847}
   - component: {fileID: 6264889675079574996}
   - component: {fileID: 653586402422743771}
@@ -815,6 +862,20 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!136 &5008102871316364061
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6725467600401944845}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2.0640216
+  m_Direction: 1
+  m_Center: {x: 0, y: -0.022937298, z: 0}
 --- !u!114 &6725467600401944847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,6 +903,7 @@ MonoBehaviour:
   _leanTime: 0.2
   _leanOffset: 0.2
   _leanOffsetTime: 0.8
+  _isDebugging: 1
 --- !u!114 &6264889675079574996
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -987,7 +1049,6 @@ GameObject:
   - component: {fileID: 6725467600736773788}
   - component: {fileID: 6725467600736773785}
   - component: {fileID: 6725467600736773790}
-  - component: {fileID: 6725467600736773791}
   m_Layer: 0
   m_Name: Player Body
   m_TagString: Untagged
@@ -1058,20 +1119,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6725467600736773791
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6725467600736773789}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6725467601001390775
 GameObject:
   m_ObjectHideFlags: 0

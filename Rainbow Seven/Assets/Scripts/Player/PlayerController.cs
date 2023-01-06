@@ -8,7 +8,7 @@ using Photon.Pun;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Photon.Realtime;
 
-[RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(PhotonView))]
 public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 {
     [Header("References")]
@@ -30,14 +30,12 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
     [SerializeField] private float _leanOffset = .15f;
     [SerializeField] private float _leanOffsetTime = .8f;
 
-    [Header("Debug")]
-    [SerializeField] private bool _isDebugging;
-
     public static CinemachinePOV Pov;
 
     private CharacterController _controller;
     private InputManager _inputs;
     private PhotonView _photonView;
+    private PlayerManager _playerManager;
 
     private Vector3 _movement;
     private Vector3 _playerVelocity;
@@ -61,9 +59,8 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         _controller = GetComponent<CharacterController>();
         _photonView = GetComponent<PhotonView>();
 
-#if (UNITY_EDITOR == false)
-        Destroy(gameobject);    
-#endif
+        // Finds the player manager into the photons instantionData array
+        _playerManager = PhotonView.Find((int) _photonView.InstantiationData[0]).GetComponent<PlayerManager>();
     }
 
     private void Start()
@@ -237,7 +234,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     public void TakeDamage(int damage)
     {
-        _photonView.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+        _photonView.RPC(nameof(RPC_TakeDamage), RpcTarget.All, damage);
     }
 
     [PunRPC]
@@ -249,7 +246,7 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
         _currentHealth -= damage;
 
 #if UNITY_EDITOR
-        if (_isDebugging) {
+        if (_playerManager.IsDebugging && !_playerManager.ShouldRespawn) {
             Debug.Log($"{gameObject.name} Took Damage: {damage}");
 
             return;
@@ -263,6 +260,6 @@ public class PlayerController : MonoBehaviourPunCallbacks, IDamageable
 
     private void Die()
     {
-        Destroy(gameObject);
+        _playerManager.Die();
     }
 }  
